@@ -1,30 +1,47 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import PageHeader from '../../components/PageHeader';
 import './styles.css';
+import TeacherItem from '../../components/TeacherItem';
 
-import logoImg from '../../assets/images/logo.svg';
-import backIcon from '../../assets/images/icons/back.svg';
+
+
 
 
 function TeacherList() {
 	return (
 		<div id="page-teacher-list" className="container">
-			<header className="page-header" >
+			<PageHeader
+				title="Estes são os Proffys disponíveis."
+			>
+				<form id="search-teachers" >
+					<div className="input-block">
+						<label htmlFor="subject">Disciplina</label>
+						<input type="text" id="subject"/>
+					</div>
 
-				<div className="top-bar-container">
-					<Link to="/" >
-						<img src={backIcon} alt="Voltar"/>
-					</Link>
+					<div className="input-block">
+						<label htmlFor="week-day">Dia da semana</label>
+						<input type="text" id="week-day"/>
+					</div>
 
-					<img src={logoImg} alt="Proffy"/>
-				</div>
+					<div className="input-block">
+						<label htmlFor="time">Hora</label>
+						<input type="text" id="time"/>
+					</div>
+				</form>
+			</PageHeader>
 
-				<div className="header-content" >
-					<strong>Estes são os Proffys disponíveis.</strong>
-				</div>
+			<main>
 
-			</header>
+				<TeacherItem />
+				<TeacherItem />
+				<TeacherItem />
+				<TeacherItem />
+				<TeacherItem />
+
+			</main>
 		</div>
 	);
 }
