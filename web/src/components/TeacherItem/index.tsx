@@ -3,36 +3,53 @@ import React from 'react';
 import whatsappIcon from '../../assets/images/icons/whatsapp.svg'
 
 import './styles.css';
+import api from '../../services/api';
+export interface Teacher {
+	id: number;
+	avatar: string;
+	bio: string;
+	cost: number;
+	name: string;
+	subject: string;
+	user_id: number;
+	whatsapp: string;
 
-function TeacherItem() {
+}
+interface TeacherItemProps {
+	teacher: Teacher;
+}
+const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) => {
+
+	function createNewConnection(){
+		api.post('/connections', {
+			user_id: teacher.user_id,
+		});
+	}
+
 	return (
 
 		<article className="teacher-item">
 			<header>
-				<img src="https://avatars2.githubusercontent.com/u/56188470?s=460&u=b7bf88ccce2d718a5c9254c5152ec123c6459c9d&v=4" alt="Luis Saiete" />
+				<img src={teacher.avatar} alt="Luis Saiete" />
 				<div>
-					<strong>Luis Saiete</strong>
-					<span>Maths</span>
+					<strong>{teacher.name}</strong>
+					<span>{teacher.subject}</span>
 				</div>
 			</header>
 			<p>
-				Entusiasta das melhores tecnologias de matematica avancada.
-
-						<br /> <br />
-
-						Apaixonado por explodir a cabeca dos estudantes com calculos complicados. Mais de 2000 Estudantes ja morreram em um dos meus exercicios.
-					</p>
+				{teacher.bio}
+			</p>
 
 			<footer>
 				<p>
 					Preço/hora
-							<strong>50,00 Mzn</strong>
+							<strong>{teacher.cost} Mzn</strong>
 				</p>
 
-				<button type="button" >
+				<a target="_blank" onClick={createNewConnection} href={`https://wa.me/${teacher.whatsapp}`} >
 					<img src={whatsappIcon} alt="Whatsapp" />
 							Entrar em contacto.
-						</button>
+						</a>
 			</footer>
 
 		</article>
