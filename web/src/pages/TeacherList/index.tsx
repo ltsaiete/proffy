@@ -16,10 +16,7 @@ function TeacherList() {
 				title="Estes são os Proffys disponíveis."
 			>
 				<form id="search-teachers" >
-					<div className="input-block">
-						<label htmlFor="subject">Disciplina</label>
-						<input type="text" id="subject"/>
-					</div>
+					
 
 					<div className="input-block">
 						<label htmlFor="week-day">Dia da semana</label>
