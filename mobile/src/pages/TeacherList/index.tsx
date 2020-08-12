@@ -8,6 +8,7 @@ import PageHeader from '../../components/PageHeader';
 import TeacherItem, { Teacher } from '../../components/TeacherItem';
 import { TextInput, BorderlessButton, RectButton } from 'react-native-gesture-handler';
 import api from '../../services/api';
+import { useFocusEffect } from '@react-navigation/native';
 
 function TeacherList() {
 	const [isFiltersVisible, setIsFilterVisible] = useState(false);
@@ -32,8 +33,6 @@ function TeacherList() {
 			}
 		});
 	}
-
-
 
 	function handleToggleFiltersVisible() {
 		setIsFilterVisible(!isFiltersVisible);
