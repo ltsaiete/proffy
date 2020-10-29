@@ -37,12 +37,12 @@ function TeacherForm() {
 		])
 	}
 
-	function setScheduleItemValue(position: number, field: string, value: string){
+	function setScheduleItemValue(position: number, field: string, value: string) {
 		const updatedScheduleItems = scheduleItems.map((scheduleItem, index) => {
-			if(index === position) {
+			if (index === position) {
 				return {
 					...scheduleItem,
-					[field]:value
+					[field]: value
 				}
 			}
 
@@ -52,7 +52,7 @@ function TeacherForm() {
 		setScheduleItems(updatedScheduleItems);
 	}
 
-	function handleCreateClass(e:FormEvent) {
+	function handleCreateClass(e: FormEvent) {
 
 		api.post('/classes', {
 			name,
@@ -67,7 +67,7 @@ function TeacherForm() {
 			history.push('/')
 		}).catch(() => {
 			alert('Falha no cadastro!')
-		})
+		});
 		e.preventDefault();
 
 	}
@@ -153,7 +153,7 @@ function TeacherForm() {
 									<div className="schedule-item" key={scheduleItem.week_day}>
 										<Select
 											name="week-day"
-											onChange={e => {setScheduleItemValue(index, 'week_day', e.target.value)}}
+											onChange={e => { setScheduleItemValue(index, 'week_day', e.target.value) }}
 											label="Dia da semana"
 											value={scheduleItem.week_day}
 											options={[
@@ -172,7 +172,7 @@ function TeacherForm() {
 											label="Das"
 											type="time"
 											value={scheduleItem.from}
-											onChange={e => {setScheduleItemValue(index, 'from', e.target.value)}}
+											onChange={e => { setScheduleItemValue(index, 'from', e.target.value) }}
 										/>
 
 										<Input
@@ -180,7 +180,7 @@ function TeacherForm() {
 											label="até"
 											type="time"
 											value={scheduleItem.to}
-											onChange={e => {setScheduleItemValue(index, 'to', e.target.value)}}
+											onChange={e => { setScheduleItemValue(index, 'to', e.target.value) }}
 										/>
 									</div>
 								);
@@ -194,11 +194,11 @@ function TeacherForm() {
 							<img src={warningIcon} alt="Aviso importante" />
 						Importante! <br />
 						Preencha todos os dados
-					</p>
+						</p>
 
 						<button type="submit" >
 							Salvar cadastro.
-					</button>
+						</button>
 					</footer>
 				</form>
 			</main>
