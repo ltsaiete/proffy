@@ -2,18 +2,13 @@
 	<img src="./.github/logo.svg" alt="logo" />
 </h1>
 
-<p align="center" >
-	<b>
-		<a href="https://nextlevelweek.com/">Next Level Week 2.0</a>:rocket:
-	</b>
-</p>
+<p align="center">
+  <a href="#project">Project</a> |
+  <a href="#tools">Tools</a> |
+  <a href="#how-to-contribute">How to Contribute</a> |
+  <a href="#license">License</a></p>
 
-<p align="center"><a href="#projecto">Projecto</a> |
-<a href="#tecnologias">Tecnologias</a> |
-<a href="#como-contribuir">Como contribuir</a> |
-<a href="">Licença</a></p>
-
-## Projecto
+## :rocket: Projecto
 O Proffy é um projecto para conectar pessoas que pretendem ensinar com pessoas que pretendem receber aulas.
 
 ## Tecnologias
