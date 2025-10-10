@@ -3,6 +3,10 @@
   "compilerOptions": {
     // File Layout
     // "rootDir": "./src",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     // "outDir": "./dist",
     // Environment Settings
     // See also https://aka.ms/tsconfig/module

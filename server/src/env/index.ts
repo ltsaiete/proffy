@@ -3,12 +3,12 @@ import { z } from 'zod'
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production']),
-  PORT: z.coerce.number().default(3333)
+  PORT: z.coerce.number().default(3333),
 })
 
 const _env = envSchema.safeParse(process.env)
 
-if(_env.success === false) {
+if (_env.success === false) {
   console.log('Invalid environment variables!', _env.error.issues)
 
   throw new Error('Invalid environment variables.')
