@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String
+  passwordHash String   @map("password_hash")
+  latitude     Decimal?
+  longitude    Decimal?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  teacherSubjects TeacherSubject[]
+
+  studentLessonsSchedule LessonSchedule[] @relation(name: "student_lessons_schedule")
+  teacherLessonsSchedule LessonSchedule[] @relation(name: "teacher_lessons_schedule")
+
+  @@map("users")
+}
+
+model Subject {
+  id          String           @id @default(uuid())
+  name        String
+  description String?
+  teachers    TeacherSubject[]
+
+  @@map("subjects")
+}
+
+model TeacherSubject {
+  id   String @id @default(uuid())
+  cost Int
+
+  subject   Subject @relation(fields: [subjectId], references: [id])
+  subjectId String  @map("subject_id")
+
+  teacher       User            @relation(fields: [teacherId], references: [id])
+  teacherId     String          @map("teacher_id")
+  classSchedule ClassSchedule[]
+
+  @@map("teacher_subjects")
+}
+
+model ClassSchedule {
+  id        String @id @default(uuid())
+  weekDay   Int    @map("week_day")
+  startTime Int    @map("start_time")
+  endTime   Int    @map("end_time")
+
+  classId String         @map("class_id")
+  class   TeacherSubject @relation(fields: [classId], references: [id])
+
+  @@map("class_schedule")
+}
+
+model LessonSchedule {
+  id        String @id @default(uuid())
+  weekDay   Int    @map("week_day")
+  startTime Int    @map("start_time")
+  endTime   Int    @map("end_time")
+
+  studentId String @map("student_id")
+  student   User   @relation(name: "student_lessons_schedule", fields: [studentId], references: [id])
+
+  teacherId String @map("teacher_id")
+  teacher   User   @relation(name: "teacher_lessons_schedule", fields: [teacherId], references: [id])
+
+  @@map("lessons_schedule")
+}
+
+// model Connection {
+//   id String @id @default(uuid())
+// }
