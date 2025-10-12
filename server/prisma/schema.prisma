@@ -17,10 +17,10 @@ datasource db {
 model User {
   id           String   @id @default(uuid())
   name         String
-  email        String
+  email        String   @unique
   passwordHash String   @map("password_hash")
-  latitude     Decimal?
-  longitude    Decimal?
+  latitude     Decimal
+  longitude    Decimal
   createdAt    DateTime @default(now()) @map("created_at")
 
   teacherSubjects TeacherSubject[]

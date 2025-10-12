@@ -1,0 +1,10 @@
+import type { FastifyInstance } from 'fastify'
+import { register } from './controllers/register'
+
+export async function appRoutes(app: FastifyInstance) {
+  app.get('/', (_, reply) => {
+    return reply.send({ message: 'Hello world' })
+  })
+
+  app.post('/users', register)
+}
