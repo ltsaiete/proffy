@@ -33,7 +33,7 @@ model User {
 
 model Subject {
   id          String           @id @default(uuid())
-  name        String
+  name        String           @unique
   description String?
   teachers    TeacherSubject[]
 

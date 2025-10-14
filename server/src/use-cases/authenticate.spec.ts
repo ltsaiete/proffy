@@ -21,6 +21,7 @@ describe('Authenticate use case', () => {
       latitude: 0,
       longitude: 0,
     })
+
     const { user } = await sut.execute({
       email: 'johndoe@example.com',
       password: '123456',

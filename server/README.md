@@ -4,8 +4,8 @@ This is the backend for Proffy. An app that connects people who want to teach wi
 
 ## FRs (Functional Requirements)
 
-- [] The system shall allow users to register new accounts
-- [] The system shall allow users to authenticate
+- [x] The system shall allow users to register new accounts
+- [x] The system shall allow users to authenticate
 - [] The system shall allow to create subjects
 - [] The system shall allow students to filter teachers by subject*, day and time (nearby 10km)
 - [] The system shall allow users to reset their password
@@ -21,15 +21,16 @@ This is the backend for Proffy. An app that connects people who want to teach wi
 
 ## BRs (Business Rules)
 
-- [] The user should not be able to register with an existing email
+- [x] The user should not be able to register with an existing email
 - [] Only admins should be able to create subjects
+- [] The system should not allow to create a subject with an existent name
 - [] The system should not allow to schedule a class that begins in less than 30 mins
 - [] The student should not be able to schedule a class beginning in less than 30 mins after a class he has already scheduled
 - [] The system should not allow to schedule a class when a teacher has already a class scheduled for that time
 
 ## NFRs (Non-Functional Requirements)
 
-- [] The password should be encrypted
+- [x] The password should be encrypted
 - [] The user should be authenticated by a JWT
 - [] All listings should have 10 itens per page
 - [] The code to reset password should be sent by email
