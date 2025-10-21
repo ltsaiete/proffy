@@ -41,8 +41,8 @@ model Subject {
 }
 
 model TeacherSubject {
-  id   String @id @default(uuid())
-  cost Int
+  id    String @id @default(uuid())
+  price Int
 
   subject   Subject @relation(fields: [subjectId], references: [id])
   subjectId String  @map("subject_id")
