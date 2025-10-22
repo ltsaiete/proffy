@@ -6,8 +6,6 @@ interface RegisterUseCaseParams {
   name: string
   email: string
   password: string
-  latitude: number
-  longitude: number
 }
 
 export class RegisterUseCase {
@@ -17,8 +15,6 @@ export class RegisterUseCase {
     name,
     email,
     password,
-    latitude,
-    longitude,
   }: RegisterUseCaseParams) {
     const userWithSameEmail = await this.repository.findByEmail(email)
 
@@ -30,8 +26,6 @@ export class RegisterUseCase {
       name,
       email,
       passwordHash,
-      latitude,
-      longitude,
     })
 
     return { user }

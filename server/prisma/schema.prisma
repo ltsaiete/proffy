@@ -10,76 +10,77 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id           String   @id @default(uuid())
+  id           String @id @default(uuid())
   name         String
-  email        String   @unique
-  passwordHash String   @map("password_hash")
-  latitude     Decimal
-  longitude    Decimal
-  createdAt    DateTime @default(now()) @map("created_at")
+  email        String @unique
+  passwordHash String @map("password_hash")
 
-  teacherSubjects TeacherSubject[]
+  createdAt DateTime @default(now()) @map("created_at")
 
-  studentLessonsSchedule LessonSchedule[] @relation(name: "student_lessons_schedule")
-  teacherLessonsSchedule LessonSchedule[] @relation(name: "teacher_lessons_schedule")
+  teacher Teacher?
 
   @@map("users")
 }
 
 model Subject {
-  id          String           @id @default(uuid())
-  name        String           @unique
+  id          String  @id @default(uuid())
+  name        String  @unique
   description String?
-  teachers    TeacherSubject[]
+
+  teachers Teacher[]
 
   @@map("subjects")
 }
 
-model TeacherSubject {
-  id    String @id @default(uuid())
-  price Int
+model Teacher {
+  id          String  @id @default(uuid())
+  price       Int
+  description String?
+  latitude    Decimal
+  longitude   Decimal
 
   subject   Subject @relation(fields: [subjectId], references: [id])
   subjectId String  @map("subject_id")
 
-  teacher       User            @relation(fields: [teacherId], references: [id])
-  teacherId     String          @map("teacher_id")
-  classSchedule ClassSchedule[]
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @map("user_id")
 
-  @@map("teacher_subjects")
+  schedule TeacherSchedule[]
+
+  @@map("teachers")
 }
 
-model ClassSchedule {
+model TeacherSchedule {
   id        String @id @default(uuid())
   weekDay   Int    @map("week_day")
   startTime Int    @map("start_time")
   endTime   Int    @map("end_time")
 
-  classId String         @map("class_id")
-  class   TeacherSubject @relation(fields: [classId], references: [id])
+  teacherId String  @map("teacher_id")
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
 
-  @@map("class_schedule")
+  @@map("teachers_schedules")
 }
 
-model LessonSchedule {
-  id        String @id @default(uuid())
-  weekDay   Int    @map("week_day")
-  startTime Int    @map("start_time")
-  endTime   Int    @map("end_time")
+// model LessonSchedule {
+//   id        String @id @default(uuid())
+//   weekDay   Int    @map("week_day")
+//   startTime Int    @map("start_time")
+//   endTime   Int    @map("end_time")
 
-  studentId String @map("student_id")
-  student   User   @relation(name: "student_lessons_schedule", fields: [studentId], references: [id])
+//   studentId String @map("student_id")
+//   student   User   @relation(name: "student_lessons_schedule", fields: [studentId], references: [id])
 
-  teacherId String @map("teacher_id")
-  teacher   User   @relation(name: "teacher_lessons_schedule", fields: [teacherId], references: [id])
+//   teacherId String @map("teacher_id")
+//   teacher   User   @relation(name: "teacher_lessons_schedule", fields: [teacherId], references: [id])
 
-  @@map("lessons_schedule")
-}
+//   @@map("lessons_schedule")
+// }
 
 // model Connection {
 //   id String @id @default(uuid())

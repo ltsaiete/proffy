@@ -18,8 +18,6 @@ describe('Authenticate use case', () => {
       name: 'John Doe',
       email: 'johndoe@example.com',
       passwordHash: await hash('123456', 6),
-      latitude: 0,
-      longitude: 0,
     })
 
     const { user } = await sut.execute({
@@ -35,8 +33,6 @@ describe('Authenticate use case', () => {
       name: 'John Doe',
       email: 'johndoe@example.com',
       passwordHash: await hash('123456', 6),
-      latitude: 0,
-      longitude: 0,
     })
 
     await expect(() =>

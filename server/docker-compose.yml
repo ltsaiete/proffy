@@ -1,11 +1,11 @@
 name: proffy
 
 services:
-  proffy-mysql:
-    image: mysql:lts
+  proffy-pg:
+    image: postgres:alpine
     ports:
-      - 3306:3306
+      - 5433:5432
     environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_USER=lewis
-      - MYSQL_PASSWORD=password
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=proffy

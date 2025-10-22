@@ -8,18 +8,14 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     name: z.string(),
     email: z.string(),
     password: z.string(),
-    latitude: z.number(),
-    longitude: z.number(),
   })
-  const { email, latitude, longitude, name, password } =
+  const { email,  name, password } =
     registerBodySchema.parse(request.body)
 
   try {
     const registerUseCase = makeRegisterUseCase()
     await registerUseCase.execute({
       email,
-      latitude,
-      longitude,
       name,
       password,
     })

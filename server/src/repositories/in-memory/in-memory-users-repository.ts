@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import { Prisma, type User } from 'generated/prisma'
+import type { Prisma, User } from 'generated/prisma'
 import type { UsersRepository } from '../users-repository'
 
 export class InMemoryUsersRepository implements UsersRepository {
@@ -18,8 +18,6 @@ export class InMemoryUsersRepository implements UsersRepository {
       name: data.name,
       email: data.email,
       passwordHash: data.passwordHash,
-      latitude: new Prisma.Decimal(data.latitude.toString()),
-      longitude: new Prisma.Decimal(data.longitude.toString()),
       createdAt: new Date(),
     }
 
