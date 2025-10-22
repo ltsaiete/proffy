@@ -5,4 +5,9 @@ export interface TeacherSchedulesRepository {
   createMany(
     data: Prisma.TeacherScheduleUncheckedCreateInput[],
   ): Promise<TeacherSchedule[]>
+
+  updateMany(
+    teacherId: string,
+    data: Prisma.TeacherScheduleUncheckedCreateInput[],
+  ): Promise<TeacherSchedule[]>
 }

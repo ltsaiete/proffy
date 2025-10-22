@@ -7,6 +7,21 @@ export class InMemoryTeacherSchedulesRepository
 {
   public items: TeacherSchedule[] = []
 
+  async updateMany(
+    teacherId: string,
+    data: Prisma.TeacherScheduleUncheckedCreateInput[],
+  ) {
+    const schedules = this.items.filter((item) => item.teacherId !== teacherId)
+    schedules.push(
+      ...data.map((schedule) => ({
+        id: randomUUID(),
+        ...schedule,
+      })),
+    )
+    this.items.push(...schedules)
+    return schedules
+  }
+
   async findManyByTeacherId(teacherId: string) {
     const teacherSchedules = this.items.filter(
       (schedule) => schedule.teacherId === teacherId,

@@ -11,6 +11,12 @@ export class InMemoryTeachersRepository implements TeachersRepository {
   constructor(
     private inMemoryTeacherSchedulesRepository: TeacherSchedulesRepository,
   ) {}
+  async findById(id: string) {
+    const teacher = this.items.find((teacher) => teacher.id === id)
+
+    if (!teacher) return null
+    return teacher
+  }
 
   async findByUserId(teacherId: string) {
     const teacher = this.items.find((item) => item.userId === teacherId)
