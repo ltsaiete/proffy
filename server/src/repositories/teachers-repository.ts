@@ -1,4 +1,4 @@
-import type { Prisma, Teacher } from 'generated/prisma'
+import type { Prisma, Subject, Teacher, User } from 'generated/prisma'
 
 export interface CreateWithScheduleProps {
   teacher: Prisma.TeacherUncheckedCreateInput
@@ -9,8 +9,17 @@ export interface CreateWithScheduleProps {
   }[]
 }
 
+interface FindManyBySubjectResponse extends Teacher {
+  user: User
+  subject: Subject
+}
+
 export interface TeachersRepository {
   findById(id: string): Promise<Teacher | null>
   findByUserId(userId: string): Promise<Teacher | null>
+  findManyBySubject(
+    subjectId: string,
+    page: number,
+  ): Promise<FindManyBySubjectResponse[]>
   createWithSchedule(data: CreateWithScheduleProps): Promise<Teacher>
 }

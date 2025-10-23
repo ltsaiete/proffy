@@ -1,16 +1,53 @@
 import { randomUUID } from 'node:crypto'
-import { Prisma, type Teacher } from 'generated/prisma'
+import { Prisma, type Subject, type Teacher, type User } from 'generated/prisma'
+import type { SubjectsRepository } from '../subjects-repository'
 import type { TeacherSchedulesRepository } from '../teacher-schedules-repository'
 import type {
   CreateWithScheduleProps,
   TeachersRepository,
 } from '../teachers-repository'
+import type { UsersRepository } from '../users-repository'
+import { InMemoryUsersRepository } from './in-memory-users-repository'
 
 export class InMemoryTeachersRepository implements TeachersRepository {
   public items: Teacher[] = []
+
   constructor(
-    private inMemoryTeacherSchedulesRepository: TeacherSchedulesRepository,
+    private repositories: {
+      inMemoryTeacherSchedulesRepository?: TeacherSchedulesRepository
+      inMemoryUsersRepository?: UsersRepository
+      inMemorySubjectsRepository?: SubjectsRepository
+    },
   ) {}
+
+  async findManyBySubject(subjectId: string, page: number) {
+    if (
+      !this.repositories.inMemoryUsersRepository ||
+      !this.repositories.inMemorySubjectsRepository
+    )
+      throw new Error()
+
+    const teachers = this.items
+      .filter((teacher) => teacher.subjectId === subjectId)
+      .slice((page - 1) * 10, page * 10)
+
+    const serializedTeachers = await Promise.all(
+      teachers.map(async (teacher) => {
+        const user = (await this.repositories.inMemoryUsersRepository?.findById(
+          teacher.userId,
+        )) as User
+
+        const subject =
+          (await this.repositories.inMemorySubjectsRepository?.findById(
+            teacher.subjectId,
+          )) as Subject
+        return { ...teacher, user, subject }
+      }),
+    )
+
+    return serializedTeachers
+  }
+
   async findById(id: string) {
     const teacher = this.items.find((teacher) => teacher.id === id)
 
@@ -26,6 +63,8 @@ export class InMemoryTeachersRepository implements TeachersRepository {
   }
 
   async createWithSchedule(data: CreateWithScheduleProps) {
+    if (!this.repositories.inMemoryTeacherSchedulesRepository) throw new Error()
+
     const teacher = {
       id: randomUUID(),
       description: data.teacher.description ? data.teacher.description : null,
@@ -36,7 +75,7 @@ export class InMemoryTeachersRepository implements TeachersRepository {
       longitude: new Prisma.Decimal(data.teacher.longitude.toString()),
     }
     this.items.push(teacher)
-    await this.inMemoryTeacherSchedulesRepository.createMany(
+    await this.repositories.inMemoryTeacherSchedulesRepository.createMany(
       data.schedule.map((schedule) => ({ ...schedule, teacherId: teacher.id })),
     )
 

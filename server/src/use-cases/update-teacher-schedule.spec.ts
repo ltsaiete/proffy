@@ -17,9 +17,9 @@ describe('Update teacher schedule use case', () => {
 
   beforeEach(() => {
     teacherSchedulesRepository = new InMemoryTeacherSchedulesRepository()
-    teachersRepository = new InMemoryTeachersRepository(
-      teacherSchedulesRepository,
-    )
+    teachersRepository = new InMemoryTeachersRepository({
+      inMemoryTeacherSchedulesRepository: teacherSchedulesRepository,
+    })
     usersRepository = new InMemoryUsersRepository()
     subjectsRepository = new InMemorySubjectsRepository()
     sut = new UpdateTeacherScheduleUseCase(
