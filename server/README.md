@@ -10,8 +10,8 @@ This is the backend for Proffy. An app that connects people who want to teach wi
 - [] The system shall allow users to reset their password
 - [x] The system shall allow teachers to indicate their subject
 - [x] The system shall allow teachers to indicate the days of the week and time ranges they're available to schedule classes
-- [] The system shall allow search teachers by subject
-- [] The system shall allow fetch nearby teachers (10km)
+- [x] The system shall allow search teachers by subject
+- [x] The system shall allow fetch nearby teachers (10km)
 - [] The system shall allow a student to schedule a class with a teacher indicating the day and time range
 - [] The system shall show the details of a teacher, including his schedule and availability
 - [] The system shall allow the logged in user to get his profile

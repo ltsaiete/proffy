@@ -1,9 +1,11 @@
 import { randomUUID } from 'node:crypto'
 import { Prisma, type Subject, type Teacher, type User } from 'generated/prisma'
+import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordinates'
 import type { SubjectsRepository } from '../subjects-repository'
 import type { TeacherSchedulesRepository } from '../teacher-schedules-repository'
 import type {
   CreateWithScheduleProps,
+  FindManyNearbyProps,
   TeachersRepository,
 } from '../teachers-repository'
 import type { UsersRepository } from '../users-repository'
@@ -19,6 +21,45 @@ export class InMemoryTeachersRepository implements TeachersRepository {
       inMemorySubjectsRepository?: SubjectsRepository
     },
   ) {}
+
+  async findManyNearby(params: FindManyNearbyProps) {
+    if (
+      !this.repositories.inMemoryUsersRepository ||
+      !this.repositories.inMemorySubjectsRepository
+    )
+      throw new Error()
+
+    const teachers = this.items.filter((teacher) => {
+      const distance = getDistanceBetweenCoordinates(
+        {
+          latitude: params.latitude,
+          longitude: params.longitude,
+        },
+        {
+          latitude: teacher.latitude.toNumber(),
+          longitude: teacher.longitude.toNumber(),
+        },
+      )
+
+      return distance < 10
+    })
+
+    const serializedTeachers = await Promise.all(
+      teachers.map(async (teacher) => {
+        const user = (await this.repositories.inMemoryUsersRepository?.findById(
+          teacher.userId,
+        )) as User
+
+        const subject =
+          (await this.repositories.inMemorySubjectsRepository?.findById(
+            teacher.subjectId,
+          )) as Subject
+        return { ...teacher, user, subject }
+      }),
+    )
+
+    return serializedTeachers
+  }
 
   async findManyBySubject(subjectId: string, page: number) {
     if (

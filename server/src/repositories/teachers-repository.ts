@@ -9,9 +9,14 @@ export interface CreateWithScheduleProps {
   }[]
 }
 
-interface FindManyBySubjectResponse extends Teacher {
+interface TeacherCompoundResponse extends Teacher {
   user: User
   subject: Subject
+}
+
+export interface FindManyNearbyProps {
+  latitude: number
+  longitude: number
 }
 
 export interface TeachersRepository {
@@ -20,6 +25,10 @@ export interface TeachersRepository {
   findManyBySubject(
     subjectId: string,
     page: number,
-  ): Promise<FindManyBySubjectResponse[]>
+  ): Promise<TeacherCompoundResponse[]>
+  findManyNearby(
+    params: FindManyNearbyProps,
+  ): Promise<TeacherCompoundResponse[]>
+
   createWithSchedule(data: CreateWithScheduleProps): Promise<Teacher>
 }
