@@ -1,11 +1,36 @@
 import { randomUUID } from 'node:crypto'
 import type { Prisma, TeacherSchedule } from 'generated/prisma'
-import type { TeacherSchedulesRepository } from '../teacher-schedules-repository'
+import type {
+  FindByTeacherIdOnWeekDayAndTimeRangeProps,
+  TeacherSchedulesRepository,
+} from '../teacher-schedules-repository'
 
 export class InMemoryTeacherSchedulesRepository
   implements TeacherSchedulesRepository
 {
   public items: TeacherSchedule[] = []
+
+  async findByTeacherIdOnWeekDayAndTimeRange(
+    data: FindByTeacherIdOnWeekDayAndTimeRangeProps,
+  ) {
+    const teacherSchedule = this.items.find((schedule) => {
+      const isSameTeacherId = schedule.teacherId === data.teacherId
+      const isSameWeekDay = schedule.weekDay === data.weekDay
+      const startsWithinScheduleTime = schedule.startTime <= data.startTime
+      const endsWithinScheduleTime = schedule.endTime >= data.endTime
+
+      return (
+        isSameTeacherId &&
+        isSameWeekDay &&
+        startsWithinScheduleTime &&
+        endsWithinScheduleTime
+      )
+    })
+
+    if (!teacherSchedule) return null
+
+    return teacherSchedule
+  }
 
   async updateMany(
     teacherId: string,

@@ -20,7 +20,7 @@ export class InMemorySubjectsRepository implements SubjectsRepository {
   }
   async create(data: Prisma.SubjectCreateInput) {
     const subject = {
-      id: randomUUID(),
+      id: data.id ?? randomUUID(),
       name: data.name,
       description: data.description ? data.description : null,
     }

@@ -23,6 +23,7 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
 
   teacher Teacher?
+  lessons Lesson[]
 
   @@map("users")
 }
@@ -51,6 +52,7 @@ model Teacher {
   userId String @unique @map("user_id")
 
   schedule TeacherSchedule[]
+  lessons  Lesson[]
 
   @@map("teachers")
 }
@@ -67,21 +69,16 @@ model TeacherSchedule {
   @@map("teachers_schedules")
 }
 
-// model LessonSchedule {
-//   id        String @id @default(uuid())
-//   weekDay   Int    @map("week_day")
-//   startTime Int    @map("start_time")
-//   endTime   Int    @map("end_time")
+model Lesson {
+  id        String   @id @default(uuid())
+  startTime DateTime @map("start_time")
+  endTime   DateTime @map("end_time")
 
-//   studentId String @map("student_id")
-//   student   User   @relation(name: "student_lessons_schedule", fields: [studentId], references: [id])
+  studentId String @map("student_id")
+  student   User   @relation(fields: [studentId], references: [id])
 
-//   teacherId String @map("teacher_id")
-//   teacher   User   @relation(name: "teacher_lessons_schedule", fields: [teacherId], references: [id])
+  teacherId String  @map("teacher_id")
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
 
-//   @@map("lessons_schedule")
-// }
-
-// model Connection {
-//   id String @id @default(uuid())
-// }
+  @@map("lessons")
+}

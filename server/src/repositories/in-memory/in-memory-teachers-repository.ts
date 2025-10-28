@@ -9,7 +9,6 @@ import type {
   TeachersRepository,
 } from '../teachers-repository'
 import type { UsersRepository } from '../users-repository'
-import { InMemoryUsersRepository } from './in-memory-users-repository'
 
 export class InMemoryTeachersRepository implements TeachersRepository {
   public items: Teacher[] = []
@@ -107,7 +106,7 @@ export class InMemoryTeachersRepository implements TeachersRepository {
     if (!this.repositories.inMemoryTeacherSchedulesRepository) throw new Error()
 
     const teacher = {
-      id: randomUUID(),
+      id: data.teacher.id ?? randomUUID(),
       description: data.teacher.description ? data.teacher.description : null,
       price: data.teacher.price,
       userId: data.teacher.userId,

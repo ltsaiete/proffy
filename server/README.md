@@ -12,7 +12,7 @@ This is the backend for Proffy. An app that connects people who want to teach wi
 - [x] The system shall allow teachers to indicate the days of the week and time ranges they're available to schedule classes
 - [x] The system shall allow search teachers by subject
 - [x] The system shall allow fetch nearby teachers (10km)
-- [] The system shall allow a student to schedule a class with a teacher indicating the day and time range
+- [x] The system shall allow a student to schedule a class with a teacher indicating the day and time range
 - [] The system shall show the details of a teacher, including his schedule and availability
 - [] The system shall allow the logged in user to get his profile
 - [] The system shall allow a logged in teacher to get the details of his schedule
@@ -26,11 +26,12 @@ This is the backend for Proffy. An app that connects people who want to teach wi
 - [] Only admins should be able to create subjects
 - [x] The system should not allow to create a subject with an existing name
 - [x] The system should not allow a teacher to have more than one subject
-- [] The student should not be able to schedule a lesson beginning in less than 30 mins after a class he has already scheduled
-- [] The system should not allow a student to schedule a lesson when a teacher has already a lesson scheduled for that time
+- [x] The student should not be able to schedule a lesson beginning in less than 30 mins after a class he has already scheduled
+- [x] The system should not allow a student to schedule a lesson when a teacher has already a lesson scheduled for that time
 - [x] Lessons can only be scheduled between 7AM and 6PM
-- [] A lesson must be scheduled for at least 30min
+- [x] A lesson must be scheduled for at least 30min
 - [x] A teacher should have only one schedule range per day
+- [x] The system should not allow to schedule a lesson for a past date
 
 ## NFRs (Non-Functional Requirements)
 
