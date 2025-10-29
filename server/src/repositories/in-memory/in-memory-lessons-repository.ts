@@ -9,16 +9,40 @@ import type {
 export class InMemoryLessonsRepository implements LessonsRepository {
   public items: Lesson[] = []
 
+  async findManyByTeacherIdOnTime(data: FindByTeacherIdOnTimeProps) {
+    const lessons = this.items.filter((item) => {
+      return (
+        item.teacherId === data.teacherId &&
+        item.startTime >= data.from &&
+        item.endTime < data.to
+      )
+    })
+
+    return lessons
+  }
+
+  async findManyByStudentIdOnTime(data: FindByStudentIdOnTimeProps) {
+    const lessons = this.items.filter((item) => {
+      return (
+        item.studentId === data.studentId &&
+        item.startTime >= data.from &&
+        item.endTime < data.to
+      )
+    })
+
+    return lessons
+  }
+
   async findByTeacherIdOnTime(data: FindByTeacherIdOnTimeProps) {
     const lesson = this.items.find((item) => {
       const startsBeforeLesson =
-        data.startTime <= item.startTime && data.endTime > item.startTime
+        data.from <= item.startTime && data.to > item.startTime
 
       const occursDuringLesson =
-        data.startTime >= item.startTime && data.endTime <= item.endTime
+        data.from >= item.startTime && data.to <= item.endTime
 
       const startsDuringLesson =
-        data.startTime < item.endTime && data.endTime >= item.endTime
+        data.from < item.endTime && data.to >= item.endTime
 
       return (
         item.teacherId === data.teacherId &&
@@ -34,13 +58,13 @@ export class InMemoryLessonsRepository implements LessonsRepository {
   async findByStudentIdOnTime(data: FindByStudentIdOnTimeProps) {
     const lesson = this.items.find((item) => {
       const startsBeforeLesson =
-        data.startTime <= item.startTime && data.endTime > item.startTime
+        data.from <= item.startTime && data.to > item.startTime
 
       const occursDuringLesson =
-        data.startTime >= item.startTime && data.endTime <= item.endTime
+        data.from >= item.startTime && data.to <= item.endTime
 
       const startsDuringLesson =
-        data.startTime < item.endTime && data.endTime >= item.endTime
+        data.from < item.endTime && data.to >= item.endTime
 
       return (
         item.studentId === data.studentId &&

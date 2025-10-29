@@ -7,10 +7,7 @@ import { InvalidLessonLengthError } from './errors/invalid-lesson-length-error'
 import { InvalidScheduleDateError } from './errors/invalid-schedule-date-error'
 import { LessonAlreadyScheduledForSelectedTimeError } from './errors/lesson-already-scheduled-for-selected-time-error'
 import { NoScheduleInDateError } from './errors/no-schedule-in-date-error'
-import { OnlyOneClassPerDayAllowedError } from './errors/only-one-class-per-day-allowed-error'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
-import { ScheduleTimeOutOfRangeError } from './errors/schedule-time-out-of-range-error'
-import { TeacherAlreadyHasSubjectAssignedError } from './errors/teacher-already-has-subject-assigned-error'
 
 interface ScheduleLessonUseCaseProps {
   studentId: string
@@ -68,8 +65,8 @@ export class ScheduleLessonUseCase {
     const teacherLessonOnSelectedTime =
       await this.lessonsRepository.findByTeacherIdOnTime({
         teacherId,
-        startTime,
-        endTime,
+        from: startTime,
+        to: endTime,
       })
     if (teacherLessonOnSelectedTime)
       throw new LessonAlreadyScheduledForSelectedTimeError()
@@ -77,8 +74,8 @@ export class ScheduleLessonUseCase {
     const studentLessonOnSelectedTime =
       await this.lessonsRepository.findByStudentIdOnTime({
         studentId,
-        startTime: dayjs(startTime).subtract(30, 'minute').toDate(),
-        endTime,
+        from: dayjs(startTime).subtract(30, 'minute').toDate(),
+        to: endTime,
       })
     if (studentLessonOnSelectedTime)
       throw new LessonAlreadyScheduledForSelectedTimeError()

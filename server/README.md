@@ -13,12 +13,14 @@ This is the backend for Proffy. An app that connects people who want to teach wi
 - [x] The system shall allow search teachers by subject
 - [x] The system shall allow fetch nearby teachers (10km)
 - [x] The system shall allow a student to schedule a class with a teacher indicating the day and time range
-- [] The system shall show the details of a teacher, including his schedule and availability
-- [] The system shall allow the logged in user to get his profile
-- [] The system shall allow a logged in teacher to get the details of his schedule
-- [] The system shall allow a user to get their lessons history
+- [x] The system shall allow to get the schedule of a teacher
+- [x] The system shall allow to list the lessons of a teacher for the period of one week
+- [x] The system shall allow to list the lessons of a student for the period of one week
+- [x] The system shall allow the logged in user to get his profile
+<!-- - [] The system shall allow a teacher or student to get the details of a lesson the're part of -->
+- [] The system shall allow a teacher to get their lessons history
 - [x] The system shall allow a teacher to update their schedule
-- [] The system shall allow a user to get the count of their lessons
+- [] The system shall allow a teacher to get the count of their lessons
 
 ## BRs (Business Rules)
 
@@ -32,6 +34,7 @@ This is the backend for Proffy. An app that connects people who want to teach wi
 - [x] A lesson must be scheduled for at least 30min
 - [x] A teacher should have only one schedule range per day
 - [x] The system should not allow to schedule a lesson for a past date
+- [] Only the logged in student can request the list of his lessons
 
 ## NFRs (Non-Functional Requirements)
 

@@ -2,18 +2,24 @@ import type { Lesson, Prisma } from 'generated/prisma'
 
 export interface FindByTeacherIdOnTimeProps {
   teacherId: string
-  startTime: Date
-  endTime: Date
+  from: Date
+  to: Date
 }
 
 export interface FindByStudentIdOnTimeProps {
   studentId: string
-  startTime: Date
-  endTime: Date
+  from: Date
+  to: Date
 }
 
 export interface LessonsRepository {
   create(data: Prisma.LessonUncheckedCreateInput): Promise<Lesson>
+  findManyByTeacherIdOnTime(
+    data: FindByTeacherIdOnTimeProps,
+  ): Promise<Lesson[]>
+  findManyByStudentIdOnTime(
+    data: FindByStudentIdOnTimeProps,
+  ): Promise<Lesson[]>
   findByTeacherIdOnTime(
     data: FindByTeacherIdOnTimeProps,
   ): Promise<Lesson | null>
