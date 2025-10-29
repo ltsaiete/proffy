@@ -9,6 +9,24 @@ import type {
 export class InMemoryLessonsRepository implements LessonsRepository {
   public items: Lesson[] = []
 
+  async countByTeacherId(teacherId: string) {
+    const lessons = this.items.filter((item) => {
+      return item.teacherId === teacherId
+    })
+
+    return lessons.length
+  }
+
+  async findManyByTeacherId(teacherId: string, page: number) {
+    const lessons = this.items
+      .filter((item) => {
+        return item.teacherId === teacherId
+      })
+      .slice((page - 1) * 10, page * 10)
+
+    return lessons
+  }
+
   async findManyByTeacherIdOnTime(data: FindByTeacherIdOnTimeProps) {
     const lessons = this.items.filter((item) => {
       return (

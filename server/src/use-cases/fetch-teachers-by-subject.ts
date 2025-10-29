@@ -1,7 +1,5 @@
 import type { Subject, Teacher, User } from 'generated/prisma'
-import type { SubjectsRepository } from '@/repositories/subjects-repository'
 import type { TeachersRepository } from '@/repositories/teachers-repository'
-import { SubjectAlreadyExistsError } from './errors/subject-already-exists-error'
 
 interface FetchTeachersBySubjectUseCaseProps {
   page: number

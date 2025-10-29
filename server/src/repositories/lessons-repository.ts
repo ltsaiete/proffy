@@ -14,12 +14,10 @@ export interface FindByStudentIdOnTimeProps {
 
 export interface LessonsRepository {
   create(data: Prisma.LessonUncheckedCreateInput): Promise<Lesson>
-  findManyByTeacherIdOnTime(
-    data: FindByTeacherIdOnTimeProps,
-  ): Promise<Lesson[]>
-  findManyByStudentIdOnTime(
-    data: FindByStudentIdOnTimeProps,
-  ): Promise<Lesson[]>
+  countByTeacherId(teacherId: string): Promise<number>
+  findManyByTeacherId(teacherId: string, page: number): Promise<Lesson[]>
+  findManyByTeacherIdOnTime(data: FindByTeacherIdOnTimeProps): Promise<Lesson[]>
+  findManyByStudentIdOnTime(data: FindByStudentIdOnTimeProps): Promise<Lesson[]>
   findByTeacherIdOnTime(
     data: FindByTeacherIdOnTimeProps,
   ): Promise<Lesson | null>
