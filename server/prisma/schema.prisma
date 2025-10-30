@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String @id @default(uuid())
+  name         String
+  email        String @unique
+  passwordHash String @map("password_hash")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  teacher Teacher?
+  lessons Lesson[]
+
+  @@map("users")
+}
+
+model Subject {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+
+  teachers Teacher[]
+
+  @@map("subjects")
+}
+
+model Teacher {
+  id          String  @id @default(uuid())
+  price       Int
+  description String?
+  latitude    Decimal
+  longitude   Decimal
+
+  subject   Subject @relation(fields: [subjectId], references: [id])
+  subjectId String  @map("subject_id")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @map("user_id")
+
+  schedule TeacherSchedule[]
+  lessons  Lesson[]
+
+  @@map("teachers")
+}
+
+model TeacherSchedule {
+  id        String @id @default(uuid())
+  weekDay   Int    @map("week_day")
+  startTime Int    @map("start_time")
+  endTime   Int    @map("end_time")
+
+  teacherId String  @map("teacher_id")
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+
+  @@map("teachers_schedules")
+}
+
+model Lesson {
+  id        String   @id @default(uuid())
+  startTime DateTime @map("start_time")
+  endTime   DateTime @map("end_time")
+
+  studentId String @map("student_id")
+  student   User   @relation(fields: [studentId], references: [id])
+
+  teacherId String  @map("teacher_id")
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+
+  @@map("lessons")
+}
