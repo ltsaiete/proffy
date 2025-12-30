@@ -32,7 +32,7 @@ export class InMemoryTeacherSchedulesRepository
     return teacherSchedule
   }
 
-  async updateMany(
+  async saveMany(
     teacherId: string,
     data: Prisma.TeacherScheduleUncheckedCreateInput[],
   ) {
@@ -43,7 +43,7 @@ export class InMemoryTeacherSchedulesRepository
         ...schedule,
       })),
     )
-    this.items.push(...schedules)
+    this.items = schedules
     return schedules
   }
 
@@ -62,6 +62,6 @@ export class InMemoryTeacherSchedulesRepository
     }))
     this.items.push(...schedules)
 
-    return schedules
+    return { count: schedules.length }
   }
 }

@@ -14,9 +14,9 @@ export interface TeacherSchedulesRepository {
   findManyByTeacherId(teacherId: string): Promise<TeacherSchedule[]>
   createMany(
     data: Prisma.TeacherScheduleUncheckedCreateInput[],
-  ): Promise<TeacherSchedule[]>
+  ): Promise<Prisma.BatchPayload>
 
-  updateMany(
+  saveMany(
     teacherId: string,
     data: Prisma.TeacherScheduleUncheckedCreateInput[],
   ): Promise<TeacherSchedule[]>

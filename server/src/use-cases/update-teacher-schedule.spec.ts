@@ -39,8 +39,9 @@ describe('Update teacher schedule use case', () => {
       name: 'Maths',
     })
 
-    const teacher = await teachersRepository.createWithSchedule({
+    await teachersRepository.createWithSchedule({
       teacher: {
+        id: 'teacher-01',
         price: 10,
         userId: user.id,
         subjectId: subject.id,
@@ -54,11 +55,16 @@ describe('Update teacher schedule use case', () => {
           startTime: 420,
           endTime: 1080,
         },
+        {
+          weekDay: 2,
+          startTime: 420,
+          endTime: 1080,
+        },
       ],
     })
 
     const { schedule } = await sut.execute({
-      teacherId: teacher.id,
+      teacherId: 'teacher-01',
       schedule: [
         {
           weekDay: 0,
@@ -76,14 +82,19 @@ describe('Update teacher schedule use case', () => {
     expect(schedule).toHaveLength(2)
     expect(schedule).toEqual([
       expect.objectContaining({
-        teacherId: teacher.id,
+        teacherId: 'teacher-01',
         id: expect.any(String),
+        startTime: 420,
+        endTime: 720,
       }),
       expect.objectContaining({
-        teacherId: teacher.id,
+        teacherId: 'teacher-01',
         id: expect.any(String),
       }),
     ])
+    await expect(
+      teacherSchedulesRepository.findManyByTeacherId('teacher-01'),
+    ).resolves.toHaveLength(2)
   })
 
   it('Should not allow a teacher to schedule a class out of 7AM to 6PM range', async () => {

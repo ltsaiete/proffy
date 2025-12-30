@@ -37,7 +37,7 @@ export class UpdateTeacherScheduleUseCase {
     if (uniqueScheduleWeekDays.size !== scheduleWeekDays.length)
       throw new OnlyOneClassPerDayAllowedError()
 
-    const updatedSchedule = await this.teacherSchedulesRepository.updateMany(
+    const updatedSchedule = await this.teacherSchedulesRepository.saveMany(
       teacherId,
       schedule.map((item) => ({ ...item, teacherId })),
     )

@@ -66,6 +66,7 @@ model TeacherSchedule {
   teacherId String  @map("teacher_id")
   teacher   Teacher @relation(fields: [teacherId], references: [id])
 
+  // @@unique([teacherId, weekDay])
   @@map("teachers_schedules")
 }
 
