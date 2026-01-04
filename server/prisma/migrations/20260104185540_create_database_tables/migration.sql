@@ -20,13 +20,15 @@ CREATE TABLE "subjects" (
 
 -- CreateTable
 CREATE TABLE "teachers" (
+    "id" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
+    "description" TEXT,
     "latitude" DECIMAL(65,30) NOT NULL,
     "longitude" DECIMAL(65,30) NOT NULL,
     "subject_id" TEXT NOT NULL,
-    "teacher_id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
 
-    CONSTRAINT "teachers_pkey" PRIMARY KEY ("teacher_id","subject_id")
+    CONSTRAINT "teachers_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -40,6 +42,17 @@ CREATE TABLE "teachers_schedules" (
     CONSTRAINT "teachers_schedules_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "lessons" (
+    "id" TEXT NOT NULL,
+    "start_time" TIMESTAMP(3) NOT NULL,
+    "end_time" TIMESTAMP(3) NOT NULL,
+    "student_id" TEXT NOT NULL,
+    "teacher_id" TEXT NOT NULL,
+
+    CONSTRAINT "lessons_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -47,13 +60,19 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 CREATE UNIQUE INDEX "subjects_name_key" ON "subjects"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "teachers_teacher_id_key" ON "teachers"("teacher_id");
+CREATE UNIQUE INDEX "teachers_user_id_key" ON "teachers"("user_id");
 
 -- AddForeignKey
 ALTER TABLE "teachers" ADD CONSTRAINT "teachers_subject_id_fkey" FOREIGN KEY ("subject_id") REFERENCES "subjects"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "teachers" ADD CONSTRAINT "teachers_teacher_id_fkey" FOREIGN KEY ("teacher_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "teachers" ADD CONSTRAINT "teachers_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "teachers_schedules" ADD CONSTRAINT "teachers_schedules_teacher_id_fkey" FOREIGN KEY ("teacher_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "teachers_schedules" ADD CONSTRAINT "teachers_schedules_teacher_id_fkey" FOREIGN KEY ("teacher_id") REFERENCES "teachers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "lessons" ADD CONSTRAINT "lessons_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "lessons" ADD CONSTRAINT "lessons_teacher_id_fkey" FOREIGN KEY ("teacher_id") REFERENCES "teachers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
