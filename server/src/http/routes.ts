@@ -1,6 +1,8 @@
 import type { FastifyInstance } from 'fastify'
 import { authenticate } from './controllers/authenticate'
+import { profile } from './controllers/profile'
 import { register } from './controllers/register'
+import { verifyJwt } from './hooks/verify-jwt'
 
 export async function appRoutes(app: FastifyInstance) {
   app.get('/', (_, reply) => {
@@ -9,4 +11,7 @@ export async function appRoutes(app: FastifyInstance) {
 
   app.post('/users', register)
   app.post('/sessions', authenticate)
+
+  // Authenticated
+  app.get('/me', { onRequest: [verifyJwt] }, profile)
 }
