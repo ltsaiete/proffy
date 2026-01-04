@@ -9,11 +9,10 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     email: z.string(),
     password: z.string(),
   })
-  const { email,  name, password } =
-    registerBodySchema.parse(request.body)
+  const { email, name, password } = registerBodySchema.parse(request.body)
+  const registerUseCase = makeRegisterUseCase()
 
   try {
-    const registerUseCase = makeRegisterUseCase()
     await registerUseCase.execute({
       email,
       name,
