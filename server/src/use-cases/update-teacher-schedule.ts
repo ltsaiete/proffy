@@ -2,6 +2,7 @@ import type { TeacherSchedulesRepository } from '@/repositories/teacher-schedule
 import type { TeachersRepository } from '@/repositories/teachers-repository'
 import { OnlyOneClassPerDayAllowedError } from './errors/only-one-class-per-day-allowed-error'
 import { ScheduleTimeOutOfRangeError } from './errors/schedule-time-out-of-range-error'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface UpdateTeacherScheduleUseCaseProps {
   teacherId: string
@@ -21,7 +22,7 @@ export class UpdateTeacherScheduleUseCase {
   async execute({ teacherId, schedule }: UpdateTeacherScheduleUseCaseProps) {
     const teacher = await this.teachersRepository.findById(teacherId)
 
-    if (!teacher) throw new Error('Teacher does not exist')
+    if (!teacher) throw new ResourceNotFoundError('Teacher')
 
     const scheduleWeekDays: number[] = []
 

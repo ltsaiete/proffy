@@ -38,7 +38,16 @@ This is the backend for Proffy. An app that connects people who want to teach wi
 ## NFRs (Non-Functional Requirements)
 
 - [x] The password should be encrypted
-- [] The user should be authenticated by a JWT
-- [] All listings should have 10 itens per page
+- [x] The user should be authenticated by a JWT
+- [x] All listings should have 10 itens per page
 - [] The code to reset password should be sent by email
 - [x] The data should be persisted in a postgres database
+
+TODO (Bugs):
+- Separate setting subject from schedule creation
+- Get teacher id from user id in schedule update
+- Get user id from request params in other requests
+- Update fetch lessons by student id to have only one parameter
+- Use teacher user id when fetching teacher lessons history
+- Criar um use case para detalhes da aula
+- Use teacher user id when fetching teacher lessons metrics

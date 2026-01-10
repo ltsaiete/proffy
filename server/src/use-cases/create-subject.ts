@@ -3,7 +3,7 @@ import { SubjectAlreadyExistsError } from './errors/subject-already-exists-error
 
 interface CreateSubjectUseCaseProps {
   name: string
-  description?: string
+  description: string | null
 }
 export class CreateSubjectUseCase {
   constructor(private repository: SubjectsRepository) {}
@@ -14,9 +14,9 @@ export class CreateSubjectUseCase {
 
     const subject = await this.repository.create({
       name,
-      description: description ? description : null,
+      description,
     })
 
-    return subject
+    return { subject }
   }
 }
