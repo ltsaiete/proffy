@@ -51,3 +51,4 @@ TODO (Bugs):
 - Use teacher user id when fetching teacher lessons history
 - Criar um use case para detalhes da aula
 - Use teacher user id when fetching teacher lessons metrics
+ 

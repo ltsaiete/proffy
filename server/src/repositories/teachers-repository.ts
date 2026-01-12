@@ -30,5 +30,6 @@ export interface TeachersRepository {
     params: FindManyNearbyProps,
   ): Promise<TeacherWithUserAndSubject[]>
 
+  create(data: Prisma.TeacherUncheckedCreateInput): Promise<Teacher>
   createWithSchedule(data: CreateWithScheduleProps): Promise<Teacher>
 }

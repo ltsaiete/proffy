@@ -20,6 +20,20 @@ export class InMemoryTeachersRepository implements TeachersRepository {
       inMemorySubjectsRepository?: SubjectsRepository
     },
   ) {}
+  async create(data: Prisma.TeacherUncheckedCreateInput) {
+    const teacher = {
+      id: data.id ? data.id : randomUUID(),
+      description: data.description ? data.description : null,
+      price: data.price,
+      userId: data.userId,
+      subjectId: data.subjectId,
+      latitude: new Prisma.Decimal(data.latitude.toString()),
+      longitude: new Prisma.Decimal(data.longitude.toString()),
+    }
+
+    this.items.push(teacher)
+    return teacher
+  }
 
   async findManyNearby(params: FindManyNearbyProps) {
     if (
