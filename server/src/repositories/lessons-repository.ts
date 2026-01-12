@@ -1,4 +1,4 @@
-import type { Lesson, Prisma } from 'generated/prisma'
+import type { Lesson, Prisma, Teacher, User } from 'generated/prisma'
 
 export interface FindByTeacherIdOnTimeProps {
   teacherId: string
@@ -12,9 +12,17 @@ export interface FindByStudentIdOnTimeProps {
   to: Date
 }
 
+export interface LessonWithStudentAndTeacher extends Lesson {
+  student: User
+  teacher: Teacher & {
+    user: User
+  }
+}
+
 export interface LessonsRepository {
   create(data: Prisma.LessonUncheckedCreateInput): Promise<Lesson>
   countByTeacherId(teacherId: string): Promise<number>
+  findById(id: string): Promise<LessonWithStudentAndTeacher | null>
   findManyByTeacherId(teacherId: string, page: number): Promise<Lesson[]>
   findManyByTeacherIdOnTime(data: FindByTeacherIdOnTimeProps): Promise<Lesson[]>
   findManyByStudentIdOnTime(data: FindByStudentIdOnTimeProps): Promise<Lesson[]>

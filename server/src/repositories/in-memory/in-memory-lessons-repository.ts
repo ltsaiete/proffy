@@ -4,11 +4,55 @@ import type {
   FindByStudentIdOnTimeProps,
   FindByTeacherIdOnTimeProps,
   LessonsRepository,
+  LessonWithStudentAndTeacher,
 } from '../lessons-repository'
+import type { TeachersRepository } from '../teachers-repository'
+import type { UsersRepository } from '../users-repository'
 
 export class InMemoryLessonsRepository implements LessonsRepository {
   public items: Lesson[] = []
 
+  constructor(
+    private repositories: {
+      inMemoryUsersRepository?: UsersRepository
+      inMemoryTeachersRepository?: TeachersRepository
+    } = {},
+  ) {}
+
+  async findById(id: string) {
+    if (
+      !this.repositories.inMemoryUsersRepository ||
+      !this.repositories.inMemoryTeachersRepository
+    )
+      throw new Error()
+
+    const lesson = this.items.find((lesson) => lesson.id === id)
+    if (!lesson) return null
+
+    const student = await this.repositories.inMemoryUsersRepository.findById(
+      lesson.studentId,
+    )
+    if (!student) return null
+
+    const teacher = await this.repositories.inMemoryTeachersRepository.findById(
+      lesson.teacherId,
+    )
+    if (!teacher) return null
+
+    const teacherUser =
+      await this.repositories.inMemoryUsersRepository.findById(teacher.userId)
+    if (!teacherUser) return null
+
+    const serializedLesson = {
+      ...lesson,
+      student,
+      teacher: {
+        ...teacher,
+        user: teacherUser,
+      },
+    }
+    return serializedLesson
+  }
   async countByTeacherId(teacherId: string) {
     const lessons = this.items.filter((item) => {
       return item.teacherId === teacherId
@@ -97,7 +141,7 @@ export class InMemoryLessonsRepository implements LessonsRepository {
 
   async create(data: Prisma.LessonUncheckedCreateInput) {
     const lesson = {
-      id: randomUUID(),
+      id: data.id ? data.id : randomUUID(),
       startTime: new Date(data.startTime),
       endTime: new Date(data.endTime),
       studentId: data.studentId,

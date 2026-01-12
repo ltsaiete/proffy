@@ -1,4 +1,4 @@
-import type { Prisma } from 'generated/prisma'
+import type { Lesson, Prisma } from 'generated/prisma'
 import { prisma } from '@/lib/prisma'
 import type {
   FindByStudentIdOnTimeProps,
@@ -7,6 +7,21 @@ import type {
 } from '../lessons-repository'
 
 export class PrismaLessonsRepository implements LessonsRepository {
+  async findById(id: string) {
+    const lesson = await prisma.lesson.findUnique({
+      where: { id },
+      include: {
+        student: true,
+        teacher: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    })
+
+    return lesson
+  }
   async create(data: Prisma.LessonUncheckedCreateInput) {
     const lesson = await prisma.lesson.create({
       data,
