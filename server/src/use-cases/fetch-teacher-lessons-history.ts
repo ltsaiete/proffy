@@ -1,8 +1,10 @@
 import type { Lesson } from 'generated/prisma'
 import type { LessonsRepository } from '@/repositories/lessons-repository'
+import type { TeachersRepository } from '@/repositories/teachers-repository'
+import { UserNotTeacherError } from './errors/user-not-teacher-error'
 
 interface FetchTeacherLessonsHistoryUseCaseProps {
-  teacherId: string
+  teacherUserId: string
   page: number
 }
 
@@ -11,13 +13,22 @@ interface FetchTeacherLessonsHistoryUseCaseResponse {
 }
 
 export class FetchTeacherLessonsHistoryUseCase {
-  constructor(private repository: LessonsRepository) {}
+  constructor(
+    private lessonsRepository: LessonsRepository,
+    private teachersRepository: TeachersRepository,
+  ) {}
 
   async execute({
-    teacherId,
+    teacherUserId,
     page,
   }: FetchTeacherLessonsHistoryUseCaseProps): Promise<FetchTeacherLessonsHistoryUseCaseResponse> {
-    const lessons = await this.repository.findManyByTeacherId(teacherId, page)
+    const teacher = await this.teachersRepository.findByUserId(teacherUserId)
+    if (!teacher) throw new UserNotTeacherError()
+
+    const lessons = await this.lessonsRepository.findManyByTeacherId(
+      teacher.id,
+      page,
+    )
     return { lessons }
   }
 }

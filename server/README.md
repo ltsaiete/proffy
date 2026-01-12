@@ -43,12 +43,11 @@ This is the backend for Proffy. An app that connects people who want to teach wi
 - [] The code to reset password should be sent by email
 - [x] The data should be persisted in a postgres database
 
-TODO (Bugs):
-- Separate setting subject from schedule creation
-- Get teacher id from user id in schedule update
-- Get user id from request params in other requests
-- Update fetch lessons by student id to have only one parameter
-- Use teacher user id when fetching teacher lessons history
+TODO (Refactoring):
+- Separate setting subject from schedule creation [x]
+- Get teacher id from user id in schedule update[x]
+- Get user id from request params in other requests []
+- Update fetch lessons by student id to have only one parameter []
+- Use teacher user id when fetching teacher lessons history [x]
 - Criar um use case para detalhes da aula
 - Use teacher user id when fetching teacher lessons metrics
- 

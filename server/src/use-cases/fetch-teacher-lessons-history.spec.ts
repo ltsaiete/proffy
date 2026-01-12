@@ -15,7 +15,7 @@ describe('Fetch teacher lessons history use case', () => {
   let lessonsRepository: InMemoryLessonsRepository
   let sut: FetchTeacherLessonsHistoryUseCase
 
-  beforeEach(() => {
+  beforeEach(async () => {
     teacherSchedulesRepository = new InMemoryTeacherSchedulesRepository()
     teachersRepository = new InMemoryTeachersRepository({
       inMemoryTeacherSchedulesRepository: teacherSchedulesRepository,
@@ -24,16 +24,11 @@ describe('Fetch teacher lessons history use case', () => {
     subjectsRepository = new InMemorySubjectsRepository()
     lessonsRepository = new InMemoryLessonsRepository()
 
-    sut = new FetchTeacherLessonsHistoryUseCase(lessonsRepository)
+    sut = new FetchTeacherLessonsHistoryUseCase(
+      lessonsRepository,
+      teachersRepository,
+    )
     vi.useFakeTimers()
-  })
-
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
-  it('Should list teacher lessons history', async () => {
-    vi.setSystemTime(new Date(2025, 0, 19, 0, 0, 0)) // Sunday, January 19
 
     await usersRepository.create({
       id: 'teacher-user-01',
@@ -43,8 +38,8 @@ describe('Fetch teacher lessons history use case', () => {
     })
 
     await usersRepository.create({
-      id: 'student-01',
-      name: 'Student',
+      id: 'student-user-01',
+      name: 'Student User',
       email: 'student@example.com',
       passwordHash: await hash('123456', 6),
     })
@@ -54,45 +49,56 @@ describe('Fetch teacher lessons history use case', () => {
       name: 'Maths',
     })
 
-    await teachersRepository.createWithSchedule({
-      teacher: {
-        id: 'teacher-01',
-        price: 10,
-        userId: 'teacher-user-01',
-        subjectId: 'subject-01',
-        description: '',
-        latitude: 0,
-        longitude: 0,
-      },
-      schedule: [
-        {
-          weekDay: 0,
-          startTime: 420,
-          endTime: 1080,
-        },
-        {
-          weekDay: 6,
-          startTime: 420,
-          endTime: 1080,
-        },
-      ],
+    await teachersRepository.create({
+      id: 'teacher-01',
+      price: 10,
+      userId: 'teacher-user-01',
+      subjectId: 'subject-01',
+      description: '',
+      latitude: 0,
+      longitude: 0,
     })
+
+    await teacherSchedulesRepository.createMany([
+      {
+        id: 'schedule-01',
+        teacherId: 'teacher-01',
+        weekDay: 0,
+        startTime: 420,
+        endTime: 1080,
+      },
+      {
+        id: 'schedule-02',
+        teacherId: 'teacher-01',
+        weekDay: 1,
+        startTime: 420,
+        endTime: 1080,
+      },
+    ])
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('Should list teacher lessons history', async () => {
+    vi.setSystemTime(new Date(2025, 0, 19, 0, 0, 0)) // Sunday, January 19
 
     await lessonsRepository.create({
       teacherId: 'teacher-01',
-      studentId: 'student-01',
+      studentId: 'student-user-01',
       startTime: new Date(2025, 0, 19, 7, 0, 0),
       endTime: new Date(2025, 0, 19, 9, 0, 0),
     })
     await lessonsRepository.create({
       teacherId: 'teacher-01',
-      studentId: 'student-01',
+      studentId: 'student-user-01',
       startTime: new Date(2025, 0, 25, 8, 0, 0),
       endTime: new Date(2025, 0, 25, 12, 0, 0),
     })
 
     const { lessons } = await sut.execute({
-      teacherId: 'teacher-01',
+      teacherUserId: 'teacher-user-01',
       page: 1,
     })
 
@@ -108,57 +114,15 @@ describe('Fetch teacher lessons history use case', () => {
       }),
     ])
   })
+
   it('Should list paginated teacher lessons history', async () => {
     vi.setSystemTime(new Date(2025, 0, 19, 0, 0, 0)) // Sunday, January 19
 
     await usersRepository.create({
-      id: 'teacher-user-01',
-      name: 'Teacher User',
-      email: 'teacher@example.com',
-      passwordHash: await hash('123456', 6),
-    })
-
-    await usersRepository.create({
-      id: 'student-01',
-      name: 'Student',
-      email: 'student@example.com',
-      passwordHash: await hash('123456', 6),
-    })
-
-    await usersRepository.create({
-      id: 'student-02',
+      id: 'student-user-02',
       name: 'Student 2',
       email: 'student02@example.com',
       passwordHash: await hash('123456', 6),
-    })
-
-    await subjectsRepository.create({
-      id: 'subject-01',
-      name: 'Maths',
-    })
-
-    await teachersRepository.createWithSchedule({
-      teacher: {
-        id: 'teacher-01',
-        price: 10,
-        userId: 'teacher-user-01',
-        subjectId: 'subject-01',
-        description: '',
-        latitude: 0,
-        longitude: 0,
-      },
-      schedule: [
-        {
-          weekDay: 0,
-          startTime: 420,
-          endTime: 1080,
-        },
-        {
-          weekDay: 1,
-          startTime: 420,
-          endTime: 1080,
-        },
-      ],
     })
 
     const minLessonHour = 7
@@ -167,27 +131,27 @@ describe('Fetch teacher lessons history use case', () => {
     for (let i = minLessonHour; i < minLessonHour + 10; i++) {
       await lessonsRepository.create({
         teacherId: 'teacher-01',
-        studentId: 'student-01',
+        studentId: 'student-user-01',
         startTime: new Date(2025, 0, 19, i, 0, 0),
         endTime: new Date(2025, 0, 19, i, 30, 0),
       })
     }
     await lessonsRepository.create({
       teacherId: 'teacher-01',
-      studentId: 'student-02',
+      studentId: 'student-user-02',
       startTime: new Date(2025, 0, 20, 7, 0, 0),
       endTime: new Date(2025, 0, 20, 7, 30, 0),
     })
 
     await lessonsRepository.create({
       teacherId: 'teacher-01',
-      studentId: 'student-02',
+      studentId: 'student-user-02',
       startTime: new Date(2025, 0, 20, 8, 0, 0),
       endTime: new Date(2025, 0, 20, 8, 30, 0),
     })
 
     const { lessons } = await sut.execute({
-      teacherId: 'teacher-01',
+      teacherUserId: 'teacher-user-01',
       page: 2,
     })
 
@@ -195,12 +159,12 @@ describe('Fetch teacher lessons history use case', () => {
     expect(lessons).toEqual([
       expect.objectContaining({
         teacherId: 'teacher-01',
-        studentId: 'student-02',
+        studentId: 'student-user-02',
         id: expect.any(String),
       }),
       expect.objectContaining({
         teacherId: 'teacher-01',
-        studentId: 'student-02',
+        studentId: 'student-user-02',
         id: expect.any(String),
       }),
     ])
