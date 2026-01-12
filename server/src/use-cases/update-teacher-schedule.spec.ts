@@ -15,7 +15,7 @@ describe('Update teacher schedule use case', () => {
   let teacherSchedulesRepository: InMemoryTeacherSchedulesRepository
   let sut: UpdateTeacherScheduleUseCase
 
-  beforeEach(() => {
+  beforeEach(async () => {
     teacherSchedulesRepository = new InMemoryTeacherSchedulesRepository()
     teachersRepository = new InMemoryTeachersRepository({
       inMemoryTeacherSchedulesRepository: teacherSchedulesRepository,
@@ -26,45 +26,43 @@ describe('Update teacher schedule use case', () => {
       teacherSchedulesRepository,
       teachersRepository,
     )
-  })
 
-  it('Should update a teacher schedule', async () => {
-    const user = await usersRepository.create({
+    await usersRepository.create({
+      id: 'user-01',
       name: 'John Doe',
       email: 'johndoe@example.com',
       passwordHash: await hash('123456', 6),
     })
 
-    const subject = await subjectsRepository.create({
+    await subjectsRepository.create({
+      id: 'subject-01',
       name: 'Maths',
     })
 
-    await teachersRepository.createWithSchedule({
-      teacher: {
-        id: 'teacher-01',
-        price: 10,
-        userId: user.id,
-        subjectId: subject.id,
-        description: '',
-        latitude: 0,
-        longitude: 0,
-      },
-      schedule: [
-        {
-          weekDay: 0,
-          startTime: 420,
-          endTime: 1080,
-        },
-        {
-          weekDay: 2,
-          startTime: 420,
-          endTime: 1080,
-        },
-      ],
+    await teachersRepository.create({
+      id: 'teacher-01',
+      price: 10,
+      userId: 'user-01',
+      subjectId: 'subject-01',
+      description: '',
+      latitude: 0,
+      longitude: 0,
     })
 
+    await teacherSchedulesRepository.createMany([
+      {
+        id: 'schedule-01',
+        teacherId: 'teacher-01',
+        weekDay: 0,
+        startTime: 420,
+        endTime: 1080,
+      },
+    ])
+  })
+
+  it('Should update a teacher schedule', async () => {
     const { schedule } = await sut.execute({
-      teacherId: 'teacher-01',
+      teacherUserId: 'user-01',
       schedule: [
         {
           weekDay: 0,
@@ -98,37 +96,9 @@ describe('Update teacher schedule use case', () => {
   })
 
   it('Should not allow a teacher to schedule a class out of 7AM to 6PM range', async () => {
-    const user = await usersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      passwordHash: await hash('123456', 6),
-    })
-
-    const subject = await subjectsRepository.create({
-      name: 'Maths',
-    })
-
-    const teacher = await teachersRepository.createWithSchedule({
-      teacher: {
-        price: 10,
-        userId: user.id,
-        subjectId: subject.id,
-        description: '',
-        latitude: 0,
-        longitude: 0,
-      },
-      schedule: [
-        {
-          weekDay: 0,
-          startTime: 420,
-          endTime: 1080,
-        },
-      ],
-    })
-
     await expect(() =>
       sut.execute({
-        teacherId: teacher.id,
+        teacherUserId: 'user-01',
         schedule: [
           {
             weekDay: 0,
@@ -141,7 +111,7 @@ describe('Update teacher schedule use case', () => {
 
     await expect(() =>
       sut.execute({
-        teacherId: teacher.id,
+        teacherUserId: 'user-01',
         schedule: [
           {
             weekDay: 0,
@@ -154,37 +124,9 @@ describe('Update teacher schedule use case', () => {
   })
 
   it('Should not allow a teacher to schedule more than one class for the same day', async () => {
-    const user = await usersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      passwordHash: await hash('123456', 6),
-    })
-
-    const subject = await subjectsRepository.create({
-      name: 'Maths',
-    })
-
-    const teacher = await teachersRepository.createWithSchedule({
-      teacher: {
-        price: 10,
-        userId: user.id,
-        subjectId: subject.id,
-        description: '',
-        latitude: 0,
-        longitude: 0,
-      },
-      schedule: [
-        {
-          weekDay: 0,
-          startTime: 420,
-          endTime: 1080,
-        },
-      ],
-    })
-
     await expect(() =>
       sut.execute({
-        teacherId: teacher.id,
+        teacherUserId: 'user-01',
         schedule: [
           {
             weekDay: 0,

@@ -57,7 +57,7 @@ export class InMemoryTeacherSchedulesRepository
 
   async createMany(data: Prisma.TeacherScheduleUncheckedCreateInput[]) {
     const schedules = data.map((schedule) => ({
-      id: randomUUID(),
+      id: schedule.id ? schedule.id : randomUUID(),
       ...schedule,
     }))
     this.items.push(...schedules)
