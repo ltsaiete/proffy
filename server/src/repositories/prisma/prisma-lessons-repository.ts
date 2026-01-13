@@ -1,4 +1,4 @@
-import type { Lesson, Prisma } from 'generated/prisma'
+import type { Prisma } from 'generated/prisma'
 import { prisma } from '@/lib/prisma'
 import type {
   FindByStudentIdOnTimeProps,

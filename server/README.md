@@ -50,4 +50,3 @@ TODO (Refactoring):
 - Get user id from request params in other requests []
 - Update fetch lessons by student id to have only one parameter []
 - Use teacher user id when fetching teacher lessons history [x]
-- Criar um use case para detalhes da aula []
