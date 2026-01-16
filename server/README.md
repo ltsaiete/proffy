@@ -21,7 +21,7 @@ This is the backend for Proffy. An app that connects people who want to teach wi
 - [x] The system shall allow a teacher to get their lessons history
 - [x] The system shall allow a teacher to update their schedule
 - [x] The system shall allow a teacher to get the count of their lessons
-- [] The system shall allow teachers and students to get the details of a lesson they participate
+- [x] The system shall allow teachers and students to get the details of a lesson they participate
 
 ## BRs (Business Rules)
 

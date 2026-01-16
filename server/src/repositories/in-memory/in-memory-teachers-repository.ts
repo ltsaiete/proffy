@@ -18,7 +18,7 @@ export class InMemoryTeachersRepository implements TeachersRepository {
       inMemoryTeacherSchedulesRepository?: TeacherSchedulesRepository
       inMemoryUsersRepository?: UsersRepository
       inMemorySubjectsRepository?: SubjectsRepository
-    },
+    } = {},
   ) {}
   async create(data: Prisma.TeacherUncheckedCreateInput) {
     const teacher = {
@@ -67,7 +67,11 @@ export class InMemoryTeachersRepository implements TeachersRepository {
           (await this.repositories.inMemorySubjectsRepository?.findById(
             teacher.subjectId,
           )) as Subject
-        return { ...teacher, user, subject }
+        return {
+          ...teacher,
+          user: { ...user, passwordHash: undefined },
+          subject,
+        }
       }),
     )
 
@@ -95,7 +99,12 @@ export class InMemoryTeachersRepository implements TeachersRepository {
           (await this.repositories.inMemorySubjectsRepository?.findById(
             teacher.subjectId,
           )) as Subject
-        return { ...teacher, user, subject }
+        delete (user as Partial<User>).passwordHash
+        return {
+          ...teacher,
+          user,
+          subject,
+        }
       }),
     )
 

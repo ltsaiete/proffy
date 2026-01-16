@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto'
-import type { Lesson, Prisma } from 'generated/prisma'
+import type { Lesson, Prisma, User } from 'generated/prisma'
 import type {
-  FindByStudentIdOnTimeProps,
-  FindByTeacherIdOnTimeProps,
+  FindByStudentIdOnTimeOptionsProps,
+  FindByTeacherIdOnTimeOptions,
   LessonsRepository,
   LessonWithStudentAndTeacher,
 } from '../lessons-repository'
@@ -33,6 +33,7 @@ export class InMemoryLessonsRepository implements LessonsRepository {
       lesson.studentId,
     )
     if (!student) return null
+    delete (student as Partial<User>).passwordHash
 
     const teacher = await this.repositories.inMemoryTeachersRepository.findById(
       lesson.teacherId,
@@ -42,6 +43,7 @@ export class InMemoryLessonsRepository implements LessonsRepository {
     const teacherUser =
       await this.repositories.inMemoryUsersRepository.findById(teacher.userId)
     if (!teacherUser) return null
+    delete (teacherUser as Partial<User>).passwordHash
 
     const serializedLesson = {
       ...lesson,
@@ -53,6 +55,7 @@ export class InMemoryLessonsRepository implements LessonsRepository {
     }
     return serializedLesson
   }
+
   async countByTeacherId(teacherId: string) {
     const lessons = this.items.filter((item) => {
       return item.teacherId === teacherId
@@ -71,43 +74,52 @@ export class InMemoryLessonsRepository implements LessonsRepository {
     return lessons
   }
 
-  async findManyByTeacherIdOnTime(data: FindByTeacherIdOnTimeProps) {
+  async findManyByTeacherIdOnTime(
+    teacherId: string,
+    options: FindByTeacherIdOnTimeOptions,
+  ) {
     const lessons = this.items.filter((item) => {
       return (
-        item.teacherId === data.teacherId &&
-        item.startTime >= data.from &&
-        item.endTime < data.to
+        item.teacherId === teacherId &&
+        item.startTime >= options.from &&
+        item.endTime < options.to
       )
     })
 
     return lessons
   }
 
-  async findManyByStudentIdOnTime(data: FindByStudentIdOnTimeProps) {
+  async findManyByStudentIdOnTime(
+    studentId: string,
+    options: FindByStudentIdOnTimeOptionsProps,
+  ) {
     const lessons = this.items.filter((item) => {
       return (
-        item.studentId === data.studentId &&
-        item.startTime >= data.from &&
-        item.endTime < data.to
+        item.studentId === studentId &&
+        item.startTime >= options.from &&
+        item.endTime < options.to
       )
     })
 
     return lessons
   }
 
-  async findByTeacherIdOnTime(data: FindByTeacherIdOnTimeProps) {
+  async findByTeacherIdOnTime(
+    teacherId: string,
+    options: FindByTeacherIdOnTimeOptions,
+  ) {
     const lesson = this.items.find((item) => {
       const startsBeforeLesson =
-        data.from <= item.startTime && data.to > item.startTime
+        options.from <= item.startTime && options.to > item.startTime
 
       const occursDuringLesson =
-        data.from >= item.startTime && data.to <= item.endTime
+        options.from >= item.startTime && options.to <= item.endTime
 
       const startsDuringLesson =
-        data.from < item.endTime && data.to >= item.endTime
+        options.from < item.endTime && options.to >= item.endTime
 
       return (
-        item.teacherId === data.teacherId &&
+        item.teacherId === teacherId &&
         (startsBeforeLesson || occursDuringLesson || startsDuringLesson)
       )
     })
@@ -117,19 +129,22 @@ export class InMemoryLessonsRepository implements LessonsRepository {
     return lesson
   }
 
-  async findByStudentIdOnTime(data: FindByStudentIdOnTimeProps) {
+  async findByStudentIdOnTime(
+    studentId: string,
+    options: FindByStudentIdOnTimeOptionsProps,
+  ) {
     const lesson = this.items.find((item) => {
       const startsBeforeLesson =
-        data.from <= item.startTime && data.to > item.startTime
+        options.from <= item.startTime && options.to > item.startTime
 
       const occursDuringLesson =
-        data.from >= item.startTime && data.to <= item.endTime
+        options.from >= item.startTime && options.to <= item.endTime
 
       const startsDuringLesson =
-        data.from < item.endTime && data.to >= item.endTime
+        options.from < item.endTime && options.to >= item.endTime
 
       return (
-        item.studentId === data.studentId &&
+        item.studentId === studentId &&
         (startsBeforeLesson || occursDuringLesson || startsDuringLesson)
       )
     })

@@ -2,7 +2,7 @@ import type { Prisma } from 'generated/prisma'
 import { prisma } from '@/lib/prisma'
 import type {
   FindByStudentIdOnTimeProps,
-  FindByTeacherIdOnTimeProps,
+  FindByTeacherIdOnTimeOptions,
   LessonsRepository,
 } from '../lessons-repository'
 
@@ -56,7 +56,7 @@ export class PrismaLessonsRepository implements LessonsRepository {
     teacherId,
     from,
     to,
-  }: FindByTeacherIdOnTimeProps) {
+  }: FindByTeacherIdOnTimeOptions) {
     const lessons = await prisma.lesson.findMany({
       where: {
         teacherId,
@@ -91,7 +91,7 @@ export class PrismaLessonsRepository implements LessonsRepository {
     teacherId,
     from,
     to,
-  }: FindByTeacherIdOnTimeProps) {
+  }: FindByTeacherIdOnTimeOptions) {
     const lesson = await prisma.lesson.findFirst({
       where: {
         teacherId,

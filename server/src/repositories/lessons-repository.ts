@@ -1,13 +1,11 @@
 import type { Lesson, Prisma, Teacher, User } from 'generated/prisma'
 
-export interface FindByTeacherIdOnTimeProps {
-  teacherId: string
+export interface FindByTeacherIdOnTimeOptions {
   from: Date
   to: Date
 }
 
-export interface FindByStudentIdOnTimeProps {
-  studentId: string
+export interface FindByStudentIdOnTimeOptionsProps {
   from: Date
   to: Date
 }
@@ -24,13 +22,21 @@ export interface LessonsRepository {
   countByTeacherId(teacherId: string): Promise<number>
   findById(id: string): Promise<LessonWithStudentAndTeacher | null>
   findManyByTeacherId(teacherId: string, page: number): Promise<Lesson[]>
-  findManyByTeacherIdOnTime(data: FindByTeacherIdOnTimeProps): Promise<Lesson[]>
-  findManyByStudentIdOnTime(data: FindByStudentIdOnTimeProps): Promise<Lesson[]>
+  findManyByTeacherIdOnTime(
+    teacherId: string,
+    options: FindByTeacherIdOnTimeOptions,
+  ): Promise<Lesson[]>
+  findManyByStudentIdOnTime(
+    studentId: string,
+    options: FindByStudentIdOnTimeOptionsProps,
+  ): Promise<Lesson[]>
   findByTeacherIdOnTime(
-    data: FindByTeacherIdOnTimeProps,
+    teacherId: string,
+    options: FindByTeacherIdOnTimeOptions,
   ): Promise<Lesson | null>
 
   findByStudentIdOnTime(
-    data: FindByStudentIdOnTimeProps,
+    studentId: string,
+    options: FindByStudentIdOnTimeOptionsProps,
   ): Promise<Lesson | null>
 }

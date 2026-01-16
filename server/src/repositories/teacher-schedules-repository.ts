@@ -1,7 +1,6 @@
 import type { Prisma, TeacherSchedule } from 'generated/prisma'
 
-export interface FindByTeacherIdOnWeekDayAndTimeRangeProps {
-  teacherId: string
+export interface FindByTeacherIdOnWeekDayAndTimeRangeOptions {
   weekDay: number
   startTime: number
   endTime: number
@@ -9,7 +8,8 @@ export interface FindByTeacherIdOnWeekDayAndTimeRangeProps {
 
 export interface TeacherSchedulesRepository {
   findByTeacherIdOnWeekDayAndTimeRange(
-    data: FindByTeacherIdOnWeekDayAndTimeRangeProps,
+    teacherId: string,
+    options: FindByTeacherIdOnWeekDayAndTimeRangeOptions,
   ): Promise<TeacherSchedule | null>
   findManyByTeacherId(teacherId: string): Promise<TeacherSchedule[]>
   createMany(
@@ -19,5 +19,5 @@ export interface TeacherSchedulesRepository {
   saveMany(
     teacherId: string,
     data: Prisma.TeacherScheduleUncheckedCreateInput[],
-  ): Promise<TeacherSchedule[]>
+  ): Promise<TeacherSchedule[]> 
 }

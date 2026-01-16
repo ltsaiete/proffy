@@ -10,7 +10,7 @@ export interface CreateWithScheduleProps {
 }
 
 export interface TeacherWithUserAndSubject extends Teacher {
-  user: User
+  user: Omit<User, 'passwordHash'>
   subject: Subject
 }
 
