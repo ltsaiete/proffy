@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
-import { makeGetTeacherScheduleUseCase } from '@/use-cases/factories/make-get-teacher-schedule-use-case'
+import { makeGetTeacherScheduleUseCase } from '@/use-cases/teachers/factories/make-get-teacher-schedule-use-case'
 
 export async function getSchedule(
   request: FastifyRequest,

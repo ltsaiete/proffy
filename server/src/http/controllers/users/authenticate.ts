@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { InvalidCredentialsError } from '@/use-cases/errors/invalid-credentials-error'
-import { makeAuthenticateUseCase } from '@/use-cases/factories/make-authenticate-use-case'
+import { makeAuthenticateUseCase } from '@/use-cases/users/factories/make-authenticate-use-case'
 
 export async function authenticate(
   request: FastifyRequest,
@@ -24,5 +24,6 @@ export async function authenticate(
   } catch (error) {
     if (error instanceof InvalidCredentialsError)
       return reply.status(400).send({ message: error.message })
+    throw error
   }
 }

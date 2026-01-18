@@ -3,14 +3,13 @@ import z from 'zod'
 import { OnlyOneClassPerDayAllowedError } from '@/use-cases/errors/only-one-class-per-day-allowed-error'
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error'
 import { ScheduleTimeOutOfRangeError } from '@/use-cases/errors/schedule-time-out-of-range-error'
-import { makeUpdateTeacherScheduleUseCase } from '@/use-cases/factories/make-update-teacher-schedule-use-case'
+import { makeUpdateTeacherScheduleUseCase } from '@/use-cases/teachers/factories/make-update-teacher-schedule-use-case'
 
 export async function updateSchedule(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   const requestBodySchema = z.object({
-    teacherId: z.string(),
     schedule: z.array(
       z.object({
         weekDay: z.number(),
@@ -20,13 +19,13 @@ export async function updateSchedule(
     ),
   })
 
-  const { schedule, teacherId } = requestBodySchema.parse(request.body)
+  const { schedule } = requestBodySchema.parse(request.body)
 
   const updateTeacherScheduleUseCase = makeUpdateTeacherScheduleUseCase()
 
   try {
     const response = await updateTeacherScheduleUseCase.execute({
-      teacherId,
+      teacherUserId: request.user.sub,
       schedule,
     })
 
