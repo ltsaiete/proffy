@@ -4,8 +4,6 @@ import { ZodError } from 'zod'
 import { env } from './env'
 import { teachersRoutes } from './http/controllers/teachers/routes'
 import { usersRoutes } from './http/controllers/users/routes'
-import { prisma } from './lib/prisma'
-import { PrismaTeachersRepository } from './repositories/prisma/prisma-teachers-repository'
 
 export const app = Fastify()
 

@@ -1,11 +1,9 @@
-import type { Prisma, Teacher } from 'generated/prisma'
-import { Decimal } from 'generated/prisma/runtime/library'
+import { Prisma, type Teacher } from 'generated/prisma'
 import { prisma } from '@/lib/prisma'
 import type {
   CreateWithScheduleProps,
   FindManyNearbyProps,
   TeachersRepository,
-  TeacherWithUserAndSubject,
 } from '../teachers-repository'
 
 interface TeacherWithUserAndSubjectRawProps {
@@ -60,8 +58,8 @@ export class PrismaTeachersRepository implements TeachersRepository {
     const serializedTeachers = teachers.map((teacher) => {
       return {
         ...teacher,
-        latitude: Decimal(teacher.latitude),
-        longitude: Decimal(teacher.longitude),
+        latitude: Prisma.Decimal(teacher.latitude),
+        longitude: Prisma.Decimal(teacher.longitude),
         userId: teacher.user_id,
         subjectId: teacher.subject_id,
         user: {
