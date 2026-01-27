@@ -4,14 +4,15 @@ import { getSchedule } from './get-schedule'
 import { nearby } from './nearby'
 import { register } from './register'
 import { setSchedule } from './set-schedule'
+import { subject } from './subject'
 import { updateSchedule } from './update-schedule'
 
 export async function teachersRoutes(app: FastifyInstance) {
   app.get('/teachers/schedule/:teacherId', getSchedule)
   app.get('/teachers/nearby', nearby)
-  // app.get('/teachers/subjects/:subjectId', subject)
+  app.get('/teachers/subjects/:subjectId', subject)
 
-  // // Authenticated
+  // Authenticated
   app.post('/teachers', { onRequest: [verifyJwt] }, register)
   app.post('/teachers/schedule', { onRequest: [verifyJwt] }, setSchedule)
   app.put('/teachers/schedule', { onRequest: [verifyJwt] }, updateSchedule)
