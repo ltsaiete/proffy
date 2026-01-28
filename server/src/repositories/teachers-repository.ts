@@ -1,14 +1,4 @@
 import type { Prisma, Subject, Teacher, User } from 'generated/prisma'
-
-export interface CreateWithScheduleProps {
-  teacher: Prisma.TeacherUncheckedCreateInput
-  schedule: {
-    weekDay: number
-    startTime: number
-    endTime: number
-  }[]
-}
-
 export interface TeacherWithUserAndSubject extends Teacher {
   user: Omit<User, 'passwordHash'>
   subject: Subject
@@ -31,5 +21,4 @@ export interface TeachersRepository {
   ): Promise<TeacherWithUserAndSubject[]>
 
   create(data: Prisma.TeacherUncheckedCreateInput): Promise<Teacher>
-  createWithSchedule(data: CreateWithScheduleProps): Promise<Teacher>
 }

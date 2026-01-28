@@ -4,7 +4,6 @@ import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coor
 import type { SubjectsRepository } from '../subjects-repository'
 import type { TeacherSchedulesRepository } from '../teacher-schedules-repository'
 import type {
-  CreateWithScheduleProps,
   FindManyNearbyProps,
   TeachersRepository,
 } from '../teachers-repository'
@@ -121,26 +120,6 @@ export class InMemoryTeachersRepository implements TeachersRepository {
   async findByUserId(teacherId: string) {
     const teacher = this.items.find((item) => item.userId === teacherId)
     if (!teacher) return null
-
-    return teacher
-  }
-
-  async createWithSchedule(data: CreateWithScheduleProps) {
-    if (!this.repositories.inMemoryTeacherSchedulesRepository) throw new Error()
-
-    const teacher = {
-      id: data.teacher.id ?? randomUUID(),
-      description: data.teacher.description ? data.teacher.description : null,
-      price: data.teacher.price,
-      userId: data.teacher.userId,
-      subjectId: data.teacher.subjectId,
-      latitude: new Prisma.Decimal(data.teacher.latitude.toString()),
-      longitude: new Prisma.Decimal(data.teacher.longitude.toString()),
-    }
-    this.items.push(teacher)
-    await this.repositories.inMemoryTeacherSchedulesRepository.createMany(
-      data.schedule.map((schedule) => ({ ...schedule, teacherId: teacher.id })),
-    )
 
     return teacher
   }

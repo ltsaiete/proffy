@@ -19,5 +19,5 @@ export interface TeacherSchedulesRepository {
   saveMany(
     teacherId: string,
     data: Prisma.TeacherScheduleUncheckedCreateInput[],
-  ): Promise<TeacherSchedule[]> 
+  ): Promise<TeacherSchedule[]>
 }

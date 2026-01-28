@@ -1,7 +1,6 @@
 import { Prisma, type Teacher } from 'generated/prisma'
 import { prisma } from '@/lib/prisma'
 import type {
-  CreateWithScheduleProps,
   FindManyNearbyProps,
   TeachersRepository,
 } from '../teachers-repository'
@@ -106,13 +105,4 @@ export class PrismaTeachersRepository implements TeachersRepository {
     return teacher
   }
 
-  async createWithSchedule(data: CreateWithScheduleProps) {
-    const teacher = await prisma.teacher.create({
-      data: {
-        ...data.teacher,
-        schedule: { create: data.schedule },
-      },
-    })
-    return teacher
-  }
 }

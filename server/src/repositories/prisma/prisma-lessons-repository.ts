@@ -85,11 +85,10 @@ export class PrismaLessonsRepository implements LessonsRepository {
     return lessons
   }
 
-  async findByTeacherIdOnTime({
-    teacherId,
-    from,
-    to,
-  }: FindByTeacherIdOnTimeOptions) {
+  async findByTeacherIdOnTime(
+    teacherId: string,
+    { from, to }: FindByTeacherIdOnTimeOptions,
+  ) {
     const lesson = await prisma.lesson.findFirst({
       where: {
         teacherId,
@@ -120,11 +119,10 @@ export class PrismaLessonsRepository implements LessonsRepository {
     return lesson
   }
 
-  async findByStudentIdOnTime({
-    studentId,
-    from,
-    to,
-  }: FindByStudentIdOnTimeProps) {
+  async findByStudentIdOnTime(
+    studentId: string,
+    { from, to }: FindByStudentIdOnTimeOptionsProps,
+  ) {
     const lesson = await prisma.lesson.findFirst({
       where: {
         studentId,
