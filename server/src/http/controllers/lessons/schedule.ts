@@ -4,13 +4,13 @@ import { InvalidLessonLengthError } from '@/use-cases/errors/invalid-lesson-leng
 import { InvalidScheduleDateError } from '@/use-cases/errors/invalid-schedule-date-error'
 import { LessonAlreadyScheduledForSelectedTimeError } from '@/use-cases/errors/lesson-already-scheduled-for-selected-time-error'
 import { NoScheduleInDateError } from '@/use-cases/errors/no-schedule-in-date-error'
-import { makeScheduleLessonUseCase } from '@/use-cases/factories/make-schedule-lesson-use-case'
+import { makeScheduleLessonUseCase } from '@/use-cases/lessons/factories/make-schedule-lesson-use-case'
 
 export async function schedule(request: FastifyRequest, reply: FastifyReply) {
   const requestBodySchema = z.object({
     teacherId: z.string(),
-    startTime: z.date(),
-    endTime: z.date(),
+    startTime: z.iso.datetime(),
+    endTime: z.iso.datetime(),
   })
   const { teacherId, startTime, endTime } = requestBodySchema.parse(
     request.body,
@@ -22,8 +22,8 @@ export async function schedule(request: FastifyRequest, reply: FastifyReply) {
     await scheduleLessonUseCase.execute({
       teacherId,
       studentId: request.user.sub,
-      startTime,
-      endTime,
+      startTime: new Date(startTime),
+      endTime: new Date(endTime),
     })
 
     return reply.status(201).send()

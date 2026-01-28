@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
-import { makeFetchTeacherLessonsUseCase } from '@/use-cases/factories/make-fetch-teacher-lessons-use-case'
+import { makeFetchTeacherLessonsUseCase } from '@/use-cases/lessons/factories/make-fetch-teacher-lessons-use-case'
 
 export async function teacher(request: FastifyRequest, reply: FastifyReply) {
   const requestParamsSchema = z.object({

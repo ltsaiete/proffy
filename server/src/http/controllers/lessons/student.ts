@@ -1,5 +1,5 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
-import { makeFetchStudentLessonsUseCase } from '@/use-cases/factories/make-fetch-student-lessons-use-case'
+import { makeFetchStudentLessonsUseCase } from '@/use-cases/lessons/factories/make-fetch-student-lessons-use-case'
 
 export async function student(request: FastifyRequest, reply: FastifyReply) {
   const fetchStudentLessonsUseCase = makeFetchStudentLessonsUseCase()
