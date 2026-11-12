@@ -104,5 +104,4 @@ export class PrismaTeachersRepository implements TeachersRepository {
 
     return teacher
   }
-
 }

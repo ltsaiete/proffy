@@ -4,7 +4,6 @@ import type {
   FindByStudentIdOnTimeOptionsProps,
   FindByTeacherIdOnTimeOptions,
   LessonsRepository,
-  LessonWithStudentAndTeacher,
 } from '../lessons-repository'
 import type { TeachersRepository } from '../teachers-repository'
 import type { UsersRepository } from '../users-repository'

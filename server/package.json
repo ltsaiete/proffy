@@ -10,12 +10,12 @@
     "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
     "test:e2e:watch": "vitest --project e2e",
     "pretest:e2e:watch": "run-s test:create-prisma-environment test:install-prisma-environment",
-    "test:create-prisma-environment": "bun link ./prisma/vitest-environment-prisma",
+    "test:create-prisma-environment": "cd ./prisma/vitest-environment-prisma && bun link",
     "test:install-prisma-environment": "bun link vitest-environment-prisma",
     "dev": "tsx watch src/server.ts",
     "build": "tsup src",
     "start": "bun dist/server.js",
-    "lint": "npx @biomejs/biome check --write ./src"
+    "lint": "bunx @biomejs/biome check --write ./src"
   },
   "keywords": [],
   "author": "",
